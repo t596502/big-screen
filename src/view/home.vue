@@ -1,6 +1,8 @@
 <template>
-    <div>
-        <ImoocContainer :options="{width:100,height:100}"></ImoocContainer>
+    <div class="home">
+        <ImoocContainer>
+            <div class="test">2131231</div>
+         </ImoocContainer>
     </div>
 </template>
 
@@ -17,5 +19,21 @@
 </script>
 
 <style scoped>
+    /*.home{*/
+    /*    width: 100%;*/
+    /*    height: 100%;*/
 
+    /*}*/
+    .test{
+        font-size: 14px;
+        transform: scale(1,1);
+    }
+    .home #imooc-container {
+        /*width: 100%;*/
+        /*height: 100%;*/
+        /*display: flex;*/
+        /*flex-direction: column;*/
+        /*justify-content: center;*/
+        /*align-items: center;*/
+    }
 </style>

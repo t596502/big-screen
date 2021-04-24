@@ -1,8 +1,6 @@
 <template>
     <div id="imooc-container" :ref="refName">
-        <template>
-            <slot></slot>
-        </template>
+        <slot></slot>
     </div>
 </template>
 
@@ -34,30 +32,16 @@
                             width.value = dom.clientWidth
                             height.value = dom.clientHeight
                         }
-
                         if(!originalWidth.value || !originalHeight.value){
                             originalWidth.value = window.screen.width
                             originalHeight.value = window.screen.height
                         }
+                        console.log('大屏真实尺寸', width.value, height.value)
                     })
-                    console.log('大屏真实尺寸', width.value, height.value)
                     resolve()
                 })
             }
-            const promise = new Promise((resolve, reject) => {
-                console.log(1);
-                resolve();
-                setTimeout(() => {
-                    console.log(2);
-                })
-                reject('error');
-            })
-            promise.then(() => {
-                console.log(3);
-            }).then(() => {
-                console.log(5)
-            }).catch(e => console.log(e))
-            console.log(4);
+
 
             onMounted(async()=>{
                 const instance = getCurrentInstance()
@@ -74,5 +58,12 @@
 </script>
 
 <style scoped>
-
+    #imooc-container {
+        /*position: fixed;*/
+        /*top: 0;*/
+        /*left: 0;*/
+        /*overflow: hidden;*/
+        /*transform-origin: left top;*/
+        /*z-index: 999;*/
+    }
 </style>
