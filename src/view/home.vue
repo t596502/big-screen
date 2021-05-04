@@ -19,7 +19,12 @@
                                 :growth-last-month="growthLastMonth"
                         />
                     </div>
-                    <div class="left2"></div>
+                    <div class="left2">
+                        <average-age
+                                :data="ageData"
+                                :avg-age="averageAge"
+                        />
+                    </div>
                     <div class="left3"></div>
                     <div class="left4"></div>
                     <div class="left5"></div>
@@ -61,11 +66,11 @@
     import imoocLoading from '../components/ImoocLoading/index.vue'
     import TopHeader from '/@/components/TopHeader/index.vue'
     import TotalUser from '/@/components/TotalUser/index.vue'
-
+    import AverageAge from '/@/components/AverageAge/index.vue'
     console.log(useScreenData());
     export default {
         name: "Home",
-        components:{ImoocContainer,imoocLoading,TopHeader,TotalUser},
+        components:{ImoocContainer,imoocLoading,TopHeader,TotalUser,AverageAge},
         setup(){
             const loading = ref(true)
             const screenData = useScreenData()

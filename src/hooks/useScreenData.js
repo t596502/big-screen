@@ -151,17 +151,18 @@ export function useScreenData () {
         todayUser,
         growthLastDay,
         growthLastMonth,
+
         ageData,
         averageAge,
-        deviceData,
-        genderData,
-        riderData,
-        hotCategoryData,
-        headerData,
-        countryCategoryData,
-        indexCategoryData,
-        salesListData,
-        realTimeOrderData,
-        salesRankData
+        // deviceData,
+        // genderData,
+        // riderData,
+        // hotCategoryData,
+        // headerData,
+        // countryCategoryData,
+        // indexCategoryData,
+        // salesListData,
+        // realTimeOrderData,
+        // salesRankData
     }
 }

@@ -7,7 +7,10 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "echarts": "^5.1.1",
+    "uuid": "^8.3.2",
     "vue": "^3.0.4",
+    "vue-echarts": "^6.0.0-rc.5",
     "vue-router": "^4.0.6"
   },
   "devDependencies": {
