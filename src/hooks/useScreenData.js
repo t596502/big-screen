@@ -154,7 +154,7 @@ export function useScreenData () {
 
         ageData,
         averageAge,
-        // deviceData,
+        deviceData,
         // genderData,
         // riderData,
         // hotCategoryData,

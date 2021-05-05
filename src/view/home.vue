@@ -25,7 +25,10 @@
                                 :avg-age="averageAge"
                         />
                     </div>
-                    <div class="left3"></div>
+                    <div class="left3">
+                        <total-device :data="deviceData" />
+
+                    </div>
                     <div class="left4"></div>
                     <div class="left5"></div>
                     <div class="left6"></div>
@@ -67,10 +70,11 @@
     import TopHeader from '/@/components/TopHeader/index.vue'
     import TotalUser from '/@/components/TotalUser/index.vue'
     import AverageAge from '/@/components/AverageAge/index.vue'
+    import TotalDevice from '/@/components/TotalDevice/index.vue'
     console.log(useScreenData());
     export default {
         name: "Home",
-        components:{ImoocContainer,imoocLoading,TopHeader,TotalUser,AverageAge},
+        components:{ImoocContainer,imoocLoading,TopHeader,TotalUser,AverageAge,TotalDevice},
         setup(){
             const loading = ref(true)
             const screenData = useScreenData()
