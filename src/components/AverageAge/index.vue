@@ -2,7 +2,7 @@
     <div class="average-age">
         <div class="title-wrapper">
             <div class="left">
-                <div class="title">慕课外卖用户年龄分布&平均年龄</div>
+                <div class="title">外卖用户年龄分布&平均年龄</div>
                 <div class="sub-title">Distribution of Age</div>
             </div>
             <div class="right">
@@ -57,14 +57,12 @@
                 const colors = []
                 const axis = ['指标']
                 let max = 0
-                console.log(props.data);
                 props.data.forEach(item => {
                     data.push(item.value)
                     max += item.value
                     colors.push(item.color)
                     axis.push(item.axis)
                 })
-                console.log(data,axis);
                 const newOptions = {
                     tooltip: {
                         trigger: 'axis',

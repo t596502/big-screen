@@ -27,11 +27,16 @@
                     </div>
                     <div class="left3">
                         <total-device :data="deviceData" />
-
                     </div>
-                    <div class="left4"></div>
-                    <div class="left5"></div>
-                    <div class="left6"></div>
+                    <div class="left4">
+                        <total-gender :data="genderData" />
+                    </div>
+                    <div class="left5">
+                        <total-rider :data="riderData" />
+                    </div>
+                    <div class="left6">
+                        <hot-category :data="hotCategoryData" />
+                    </div>
                 </div>
                 <div class="right">
                     <div class="right-top1"></div>
@@ -71,10 +76,12 @@
     import TotalUser from '/@/components/TotalUser/index.vue'
     import AverageAge from '/@/components/AverageAge/index.vue'
     import TotalDevice from '/@/components/TotalDevice/index.vue'
-    console.log(useScreenData());
+    import TotalGender from '/@/components/TotalGender/index.vue'
+    import TotalRider from '/@/components/TotalRider/index.vue'
+    import HotCategory from '/@/components/HotCategory/index.vue'
     export default {
         name: "Home",
-        components:{ImoocContainer,imoocLoading,TopHeader,TotalUser,AverageAge,TotalDevice},
+        components:{ImoocContainer,imoocLoading,TopHeader,TotalUser,AverageAge,TotalDevice,TotalGender,TotalRider,HotCategory},
         setup(){
             const loading = ref(true)
             const screenData = useScreenData()
