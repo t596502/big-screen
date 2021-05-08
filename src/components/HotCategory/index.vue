@@ -34,6 +34,7 @@
                 function createOption () {
                     const sourceData = []
                     const { data1, data2 } = props.data
+
                     if (currentChart === 0) {
                         data1.axisX.forEach((axis, index) => {
                             sourceData.push([axis, data1.data1[index], data1.data2[index]])
@@ -43,10 +44,12 @@
                             sourceData.push([axis, data2.data1[index], data2.data2[index]])
                         })
                     }
+
                     const source = [
                         ['指标', '国内', '海外'],
                         ...sourceData
                     ]
+
                     return {
                         tooltip: {
                             trigger: 'axis',
@@ -110,6 +113,7 @@
                             }
                         ]
                     }
+
                 }
 
                 options.value = createOption()

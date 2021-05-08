@@ -158,11 +158,11 @@ export function useScreenData () {
         genderData,
         riderData,
         hotCategoryData,
-        // headerData,
-        // countryCategoryData,
-        // indexCategoryData,
-        // salesListData,
-        // realTimeOrderData,
-        // salesRankData
+        headerData,
+        countryCategoryData,
+        indexCategoryData,
+        salesListData,
+        realTimeOrderData,
+        salesRankData
     }
 }

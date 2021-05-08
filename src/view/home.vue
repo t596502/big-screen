@@ -39,19 +39,29 @@
                     </div>
                 </div>
                 <div class="right">
-                    <div class="right-top1"></div>
-                    <div class="right-top2"></div>
+                    <div class="right-top1">
+                        <center-header :data="headerData" />
+                    </div>
+                    <div class="right-top2">
+                        <transform-category :data="countryCategoryData"/>
+                    </div>
                     <div class="right-bottom">
                         <div class="right-left">
                             <div class="right-left1">
+                                <order-map />
                             </div>
                             <div class="right-left2">
-
+                                <transform-category
+                                        :data="indexCategoryData"
+                                        :color="['rgb(178,209,126)', 'rgb(116,166,49)']"
+                                />
                             </div>
                             <div class="right-left3">
+                                <real-time-order :data="realTimeOrderData"/>
 
                             </div>
                             <div class="right-left4">
+
                             </div>
                         </div>
                         <div class="right-right">
@@ -79,9 +89,13 @@
     import TotalGender from '/@/components/TotalGender/index.vue'
     import TotalRider from '/@/components/TotalRider/index.vue'
     import HotCategory from '/@/components/HotCategory/index.vue'
+    import CenterHeader from '/@/components/CenterHeader/index.vue'
+    import TransformCategory from '/@/components/TransformCategory/index.vue'
+    import OrderMap from '/@/components/OrderMap/index.vue'
+    import RealTimeOrder from '/@/components/RealTimeOrder/index.vue'
     export default {
         name: "Home",
-        components:{ImoocContainer,imoocLoading,TopHeader,TotalUser,AverageAge,TotalDevice,TotalGender,TotalRider,HotCategory},
+        components:{ImoocContainer,imoocLoading,TopHeader,TotalUser,AverageAge,TotalDevice,TotalGender,TotalRider,HotCategory,CenterHeader,TransformCategory,OrderMap,RealTimeOrder},
         setup(){
             const loading = ref(true)
             const screenData = useScreenData()
