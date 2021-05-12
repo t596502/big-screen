@@ -57,17 +57,20 @@
                                 />
                             </div>
                             <div class="right-left3">
-                                <real-time-order :data="realTimeOrderData"/>
-
+                                <Imooc-Fly-Box>
+                                    <real-time-order :data="realTimeOrderData"/>
+                                </Imooc-Fly-Box>
                             </div>
                             <div class="right-left4">
-
+                                <schedule-view />
                             </div>
                         </div>
                         <div class="right-right">
                             <div class="right-right1">
+                                <sales-list :data="salesListData"/>
                             </div>
                             <div class="right-right2">
+                                <sales-rank :data="salesRankData" />
                             </div>
                         </div>
                     </div>
@@ -93,9 +96,14 @@
     import TransformCategory from '/@/components/TransformCategory/index.vue'
     import OrderMap from '/@/components/OrderMap/index.vue'
     import RealTimeOrder from '/@/components/RealTimeOrder/index.vue'
+    import ImoocFlyBox from '/@/components/ImoocFlyBox/index.vue'
+    import ScheduleView from '/@/components/ScheduleView/index.vue'
+    import SalesRank from '/@/components/SalesRank/index.vue'
+    import SalesList from '/@/components/SalesList/index.vue'
+
     export default {
         name: "Home",
-        components:{ImoocContainer,imoocLoading,TopHeader,TotalUser,AverageAge,TotalDevice,TotalGender,TotalRider,HotCategory,CenterHeader,TransformCategory,OrderMap,RealTimeOrder},
+        components:{ImoocContainer,imoocLoading,TopHeader,TotalUser,AverageAge,TotalDevice,TotalGender,TotalRider,HotCategory,CenterHeader,TransformCategory,OrderMap,RealTimeOrder,ImoocFlyBox,ScheduleView,SalesRank,SalesList},
         setup(){
             const loading = ref(true)
             const screenData = useScreenData()
@@ -254,7 +262,7 @@
                             .right-right1 {
                                 width: 100%;
                                 height: 999px;
-                                padding-right: 10px;
+                                padding-right: 5px;
                                 box-sizing: border-box;
                             }
 
