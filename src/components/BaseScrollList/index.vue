@@ -1,7 +1,12 @@
 <template>
     <div class="base-scroll-list" :id="id">
         <div class="base-scroll-list-header"
-             :style="{background:actualConfig.headerBg,height:actualConfig.headerHeight + 'px'}"
+             :style="{
+               background:actualConfig.headerBg,
+               height:actualConfig.headerHeight + 'px',
+               fontSize:actualConfig.headerFontSize+'px',
+               color:actualConfig.headerColor
+               }"
         >
             <div class="header-item base-scroll-list-text"
                  v-for="(headerItem,i) in headerData"
@@ -12,28 +17,35 @@
                  }"
                  :align="align[i]"
                  v-html="headerItem"
-            >
-            </div>
+            />
 
         </div>
-        <div class="base-scroll-list-rows"
-             v-for="(rowData,rowIndex) in rowsData"
-             :key="rowIndex"
+        <div class="base-scroll-list-rows-wrapper"
              :style="{
-                height:rowHeights[rowIndex] + 'px',
-                background:rowIndex % 2 === 0 ? rowBg[1] : rowBg[0],
+                height:height - actualConfig.headerHeight + 'px'
              }"
         >
-          <div class="base-scroll-list-columns"
-          v-for="(colData,colIndex) in rowData"
-          :key="colData + colIndex"
-          :style="{
+            <div class="base-scroll-list-rows"
+                 v-for="(rowData,rowIndex) in currentRowsData"
+                 :key="rowIndex"
+                 :style="{
+                height:rowHeights[rowIndex] + 'px',
+                background:rowIndex % 2 === 0 ? rowBg[1] : rowBg[0],
+                fontSize:actualConfig.rowFontSize+'px',
+                color:actualConfig.rowColor
+             }"
+            >
+                <div class="base-scroll-list-columns"
+                     v-for="(colData,colIndex) in rowData"
+                     :key="colData + colIndex"
+                     :style="{
             width:columnWidths[colIndex] + 'px',
             ...rowStyle[colIndex]
           }"
-          :align="align[colIndex]"
-          v-html="colData"
-          />
+                     :align="align[colIndex]"
+                     v-html="colData"
+                />
+        </div>
         </div>
     </div>
 </template>
@@ -43,6 +55,7 @@
     import { v4 as uuidv4 } from 'uuid'
     import { useScreen } from '../../hooks/useScreen'
     import {cloneDeep,assign} from 'lodash'
+
     const defaultConfig = {
         // 标题数据
         header:[],
@@ -69,7 +82,20 @@
         // 每页显示数据量
         rowNum:10,
         // 居中方式
-        align:[]
+        align:[],
+        // 标题字体大小
+        headerFontSize:28,
+        // 行字体大小
+        rowFontSize:28,
+        //
+        headerColor:'#fff',
+        rowColor:'#000',
+        // 移动的位置
+        moveNum:1,
+        // 动画间隔时间
+        duration:2000,
+
+
     }
     export default {
         name: 'BaseScrollList',
@@ -83,14 +109,16 @@
         setup (props) {
             const id = `base-scroll-list-${uuidv4()}`
             const {width,height} = useScreen(id)
+            const actualConfig = ref([])
             const headerData = ref([])
             const headerStyle = ref([])
             const rowStyle = ref([])
-            const actualConfig = ref([])
             const columnWidths = ref([])
             const rowBg = ref([])
-            const rowsData = ref([])
             const rowHeights = ref([])
+            const rowsData = ref([])
+            const currentRowsData = ref([])
+            const currentIndex = ref(0) // 动画指针
             const rowNum = ref(defaultConfig.rowNum)
             const align = ref([])
 
@@ -165,12 +193,31 @@
                 }
             }
 
+            const startAnimation = async()=>{
+              const config = actualConfig.value
+              const {data,rowNum,duration,moveNum} = config
+              const totalLength = data.length
+              if(totalLength < rowNum) return
+              const index = currentIndex.value
+              const _rowsData = cloneDeep(rowsData.value)
+              let rows = _rowsData.slice(index)
+              rows.push(..._rowsData.slice(0,index))
+              console.log(rows)
+              currentRowsData.value = rows
+              currentIndex.value += moveNum
+              console.log(currentIndex.value)
+              await new Promise(resolve => setTimeout(resolve,duration))
+
+              startAnimation()
+
+            }
             onMounted(()=>{
                 const _actualConfig = assign(defaultConfig,props.config)
                 rowsData.value = _actualConfig.data || []
                 handleHeader(_actualConfig)
                 handleRows(_actualConfig)
                 actualConfig.value = _actualConfig
+                startAnimation()
             })
 
             return{
@@ -184,6 +231,8 @@
                 rowStyle,
                 rowBg,
                 align,
+                currentRowsData,
+                height,
             }
         }
     }
@@ -205,13 +254,17 @@
             font-size: 15px;
             align-items: center;
         }
-        .base-scroll-list-rows{
-          display: flex;
-          align-items: center;
-            .base-scroll-list-columns{
-            font-size: 28px;
-          }
+        .base-scroll-list-rows-wrapper{
+            overflow: hidden;
+            .base-scroll-list-rows{
+                display: flex;
+                align-items: center;
+                .base-scroll-list-columns{
+                    font-size: 28px;
+                }
+            }
         }
+
 
         /*.base-scroll-list-text {*/
         /*    //padding: 0 10px;*/
