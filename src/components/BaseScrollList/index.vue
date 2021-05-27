@@ -45,55 +45,55 @@
                      :align="align[colIndex]"
                      v-html="colData"
                 />
-        </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { ref, watch,onMounted } from 'vue'
-    import { v4 as uuidv4 } from 'uuid'
-    import { useScreen } from '../../hooks/useScreen'
-    import {cloneDeep,assign} from 'lodash'
+    import {ref, watch, onMounted} from 'vue'
+    import {v4 as uuidv4} from 'uuid'
+    import {useScreen} from '../../hooks/useScreen'
+    import {cloneDeep, assign} from 'lodash'
 
     const defaultConfig = {
         // 标题数据
-        header:[],
+        header: [],
         // 标题样式
-        headerStyle:[],
+        headerStyle: [],
         // 行样式
-        rowStyle:[],
+        rowStyle: [],
         // 行背景色
-        rowBg:[],
+        rowBg: [],
         // 标题背景色
-        headerBg:'rgb(90,90,90)',
+        headerBg: 'rgb(90,90,90)',
         // 标题高度
-        headerHeight:35,
+        headerHeight: 35,
         // 标题是否展示序号
-        headerIndex:false,
+        headerIndex: false,
         // 序号列标题的样式
         headerIndexContent: '#',
         // 序号列标题的样式
-        headerIndexStyle:{width:'50px'},
+        headerIndexStyle: {width: '50px'},
         // 序号列内容的样式
-        rowIndexStyle:{width:'50px'},
+        rowIndexStyle: {width: '50px'},
         // 数组项，二维数组
-        data:[],
+        data: [],
         // 每页显示数据量
-        rowNum:10,
+        rowNum: 10,
         // 居中方式
-        align:[],
+        align: [],
         // 标题字体大小
-        headerFontSize:28,
+        headerFontSize: 28,
         // 行字体大小
-        rowFontSize:28,
+        rowFontSize: 28,
         //
-        headerColor:'#fff',
-        rowColor:'#000',
+        headerColor: '#fff',
+        rowColor: '#000',
         // 移动的位置
-        moveNum:1,
+        moveNum: 1,
         // 动画间隔时间
-        duration:2000,
+        duration: 2000,
 
 
     }
@@ -102,13 +102,14 @@
         props: {
             config: {
                 type: Object,
-                default: () => {}
+                default: () => {
+                }
             },
 
         },
-        setup (props) {
+        setup(props) {
             const id = `base-scroll-list-${uuidv4()}`
-            const {width,height} = useScreen(id)
+            const {width, height} = useScreen(id)
             const actualConfig = ref([])
             const headerData = ref([])
             const headerStyle = ref([])
@@ -122,32 +123,32 @@
             const rowNum = ref(defaultConfig.rowNum)
             const align = ref([])
 
-            const handleHeader = (config)=>{
+            const handleHeader = (config) => {
                 config.value = assign(defaultConfig, config)
                 const _headerData = cloneDeep(config.header)
                 const _headerStyle = cloneDeep(config.headerStyle)
                 const _rowStyle = cloneDeep(config.rowStyle)
                 const _rowsData = cloneDeep(config.data)
                 const _align = cloneDeep(config.align)
-                if(config.header.length ===0){
+                if (config.header.length === 0) {
                     return
                 }
 
-                if(config.headerIndex){
+                if (config.headerIndex) {
                     _headerData.unshift(config.headerIndexContent)
                     _headerStyle.unshift(config.headerIndexStyle)
                     _rowStyle.unshift(config.rowIndexStyle)
                     _align.unshift('center')
-                    _rowsData.forEach((row,index)=>{
-                        row.unshift(index+1)
+                    _rowsData.forEach((row, index) => {
+                        row.unshift(index + 1)
                     })
                 }
                 // 动态计算header中每一列的宽度
-                let usedWidth = 0,usedColumnNum = 0;
+                let usedWidth = 0, usedColumnNum = 0;
                 // 判断是否自定义width
-                _headerStyle.forEach(style=>{
-                    if(style.width){
-                        usedWidth += +style.width.replace('px','')
+                _headerStyle.forEach(style => {
+                    if (style.width) {
+                        usedWidth += +style.width.replace('px', '')
                         usedColumnNum++
                     }
                 })
@@ -155,15 +156,15 @@
                 const avgWidth = (width.value - usedWidth) / (_headerData.length - usedColumnNum)
                 const _columnWidths = new Array(_headerData.length).fill(avgWidth)
 
-                _headerStyle.forEach((style,index)=>{
-                    if(style.width){
-                        const headerWidth = +style.width.replace('px','')
+                _headerStyle.forEach((style, index) => {
+                    if (style.width) {
+                        const headerWidth = +style.width.replace('px', '')
 
                         _columnWidths[index] = headerWidth
                     }
                 })
 
-                columnWidths.value =_columnWidths
+                columnWidths.value = _columnWidths
                 headerData.value = _headerData
                 headerStyle.value = _headerStyle
                 align.value = _align
@@ -171,16 +172,16 @@
                 rowsData.value = _rowsData
             }
 
-            const handleRows = (config)=>{
-              // 动态计算每行数据的高度
+            const handleRows = (config) => {
+                // 动态计算每行数据的高度
                 const {headerHeight} = config
                 rowNum.value = config.rowNum
                 const unusedHeight = height.value - headerHeight
 
                 // 如果rowNum大于时机数据长度，则以实际数据长度为准
 
-                if(rowsData.value.length < rowNum.value){
-                  rowNum.value = rowsData.value.length
+                if (rowsData.value.length < rowNum.value) {
+                    rowNum.value = rowsData.value.length
                 }
                 console.log(rowNum.value)
                 const avgHeight = unusedHeight / rowNum.value
@@ -188,31 +189,40 @@
                 rowHeights.value = new Array(rowNum.value).fill(avgHeight)
 
                 // 获取行背景色
-                if(config.rowBg){
-                  rowBg.value = config.rowBg
+                if (config.rowBg) {
+                    rowBg.value = config.rowBg
                 }
             }
 
-            const startAnimation = async()=>{
-              const config = actualConfig.value
-              const {data,rowNum,duration,moveNum} = config
-              const totalLength = data.length
-              if(totalLength < rowNum) return
-              const index = currentIndex.value
-              const _rowsData = cloneDeep(rowsData.value)
-              let rows = _rowsData.slice(index)
-              rows.push(..._rowsData.slice(0,index))
-              console.log(rows)
-              currentRowsData.value = rows
-              currentIndex.value += moveNum
-              console.log(currentIndex.value)
-              await new Promise(resolve => setTimeout(resolve,duration))
+            const startAnimation = async () => {
+                const config = actualConfig.value
+                const {data, rowNum, duration, moveNum} = config
+                const totalLength = data.length
+                if (totalLength < rowNum) return
+                const index = currentIndex.value
+                const _rowsData = cloneDeep(rowsData.value)
+                // 将数据重新头尾相连
+                let rows = _rowsData.slice(index)
+                rows.push(..._rowsData.slice(0, index))
+                currentRowsData.value = rows
+                // 先将所有行的高度还原
 
-              startAnimation()
+                // 将moveNum的行高度设置
+                currentIndex.value += moveNum
+
+                //是否到达最后一组
+                const isLast = currentIndex.value - totalLength
+                if(isLast >=0){
+                    currentIndex.value = isLast
+                }
+
+                await new Promise(resolve => setTimeout(resolve, duration))
+
+                await startAnimation()
 
             }
-            onMounted(()=>{
-                const _actualConfig = assign(defaultConfig,props.config)
+            onMounted(() => {
+                const _actualConfig = assign(defaultConfig, props.config)
                 rowsData.value = _actualConfig.data || []
                 handleHeader(_actualConfig)
                 handleRows(_actualConfig)
@@ -220,7 +230,7 @@
                 startAnimation()
             })
 
-            return{
+            return {
                 id,
                 headerData,
                 headerStyle,
@@ -242,24 +252,29 @@
     .base-scroll-list {
         width: 100%;
         height: 100%;
-        .base-scroll-list-text{
+
+        .base-scroll-list-text {
             padding: 0 10px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             box-sizing: border-box;
         }
-        .base-scroll-list-header{
+
+        .base-scroll-list-header {
             display: flex;
             font-size: 15px;
             align-items: center;
         }
-        .base-scroll-list-rows-wrapper{
-            overflow: hidden;
-            .base-scroll-list-rows{
+
+        .base-scroll-list-rows-wrapper {
+            /*overflow: hidden;*/
+
+            .base-scroll-list-rows {
                 display: flex;
                 align-items: center;
-                .base-scroll-list-columns{
+
+                .base-scroll-list-columns {
                     font-size: 28px;
                 }
             }
