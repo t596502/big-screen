@@ -30,6 +30,7 @@
                  :key="rowIndex"
                  :style="{
                 height:rowHeights[rowIndex] + 'px',
+                lineHeight:rowHeights[rowIndex] + 'px',
                 background:rowIndex % 2 === 0 ? rowBg[1] : rowBg[0],
                 fontSize:actualConfig.rowFontSize+'px',
                 color:actualConfig.rowColor
@@ -123,6 +124,8 @@
             const rowNum = ref(defaultConfig.rowNum)
             const align = ref([])
 
+            let avgHeight
+
             const handleHeader = (config) => {
                 config.value = assign(defaultConfig, config)
                 const _headerData = cloneDeep(config.header)
@@ -184,7 +187,7 @@
                     rowNum.value = rowsData.value.length
                 }
                 console.log(rowNum.value)
-                const avgHeight = unusedHeight / rowNum.value
+                avgHeight = unusedHeight / rowNum.value
                 console.log(avgHeight)
                 rowHeights.value = new Array(rowNum.value).fill(avgHeight)
 
@@ -207,7 +210,12 @@
                 currentRowsData.value = rows
                 // 先将所有行的高度还原
 
-                // 将moveNum的行高度设置
+                rowHeights.value = new Array(totalLength).fill(avgHeight)
+                
+                const waitTime = 300
+                await new Promise(resolve => setTimeout(resolve, waitTime))
+                // 将moveNum的行高度设置0
+                rowHeights.value.splice(0,moveNum,...new Array(moveNum).fill(0))
                 currentIndex.value += moveNum
 
                 //是否到达最后一组
@@ -216,7 +224,7 @@
                     currentIndex.value = isLast
                 }
 
-                await new Promise(resolve => setTimeout(resolve, duration))
+                await new Promise(resolve => setTimeout(resolve, duration - waitTime))
 
                 await startAnimation()
 
@@ -265,15 +273,16 @@
             display: flex;
             font-size: 15px;
             align-items: center;
+          
         }
 
         .base-scroll-list-rows-wrapper {
-            /*overflow: hidden;*/
+            overflow: hidden;
 
             .base-scroll-list-rows {
                 display: flex;
                 align-items: center;
-
+                transition: all 0.3s linear;
                 .base-scroll-list-columns {
                     font-size: 28px;
                 }
