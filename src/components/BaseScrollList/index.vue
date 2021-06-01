@@ -25,19 +25,19 @@
                 height:height - actualConfig.headerHeight + 'px'
              }"
         >
-            <div class="base-scroll-list-rows"
-                 v-for="(rowData,rowIndex) in currentRowsData"
-                 :key="rowIndex"
+            <div class="base-scroll-list-rows base-scroll-list-text"
+                 v-for="(rowData,index) in currentRowsData"
+                 :key="rowData.rowIndex"
                  :style="{
-                height:rowHeights[rowIndex] + 'px',
-                lineHeight:rowHeights[rowIndex] + 'px',
-                background:rowIndex % 2 === 0 ? rowBg[1] : rowBg[0],
+                height:rowHeights[index] + 'px',
+                lineHeight:rowHeights[index] + 'px',
+                background:rowData.rowIndex % 2 === 0 ? rowBg[1] : rowBg[0],
                 fontSize:actualConfig.rowFontSize+'px',
                 color:actualConfig.rowColor
              }"
             >
                 <div class="base-scroll-list-columns"
-                     v-for="(colData,colIndex) in rowData"
+                     v-for="(colData,colIndex) in rowData.data"
                      :key="colData + colIndex"
                      :style="{
             width:columnWidths[colIndex] + 'px',
@@ -172,7 +172,19 @@
                 headerStyle.value = _headerStyle
                 align.value = _align
                 rowStyle.value = _rowStyle
-                rowsData.value = _rowsData
+                const {rowNum} = config
+                if(_rowsData.length >= rowNum && _rowsData.length < rowNum * 2){
+                  rowsData.value = [..._rowsData,..._rowsData].map((item,index)=>({
+                    data:item,
+                    rowIndex:index
+                  }))
+                }else{
+                  rowsData.value = _rowsData.map((item,index)=>({
+                    data:item,
+                    rowIndex:index
+                  }))
+                }
+                
             }
 
             const handleRows = (config) => {
@@ -182,13 +194,11 @@
                 const unusedHeight = height.value - headerHeight
 
                 // 如果rowNum大于时机数据长度，则以实际数据长度为准
-
                 if (rowsData.value.length < rowNum.value) {
                     rowNum.value = rowsData.value.length
                 }
                 console.log(rowNum.value)
                 avgHeight = unusedHeight / rowNum.value
-                console.log(avgHeight)
                 rowHeights.value = new Array(rowNum.value).fill(avgHeight)
 
                 // 获取行背景色
@@ -200,7 +210,7 @@
             const startAnimation = async () => {
                 const config = actualConfig.value
                 const {data, rowNum, duration, moveNum} = config
-                const totalLength = data.length
+                const totalLength = rowsData.value.length
                 if (totalLength < rowNum) return
                 const index = currentIndex.value
                 const _rowsData = cloneDeep(rowsData.value)
@@ -211,7 +221,7 @@
                 // 先将所有行的高度还原
 
                 rowHeights.value = new Array(totalLength).fill(avgHeight)
-                
+                console.log('rowHeights.value',rowHeights.value)
                 const waitTime = 300
                 await new Promise(resolve => setTimeout(resolve, waitTime))
                 // 将moveNum的行高度设置0
@@ -277,7 +287,7 @@
         }
 
         .base-scroll-list-rows-wrapper {
-            overflow: hidden;
+            // overflow: hidden;
 
             .base-scroll-list-rows {
                 display: flex;
