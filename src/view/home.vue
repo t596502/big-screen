@@ -67,7 +67,8 @@
                         </div>
                         <div class="right-right">
                             <div class="right-right1">
-                                <sales-list :data="salesListData"/>
+<!--                                <sales-list :data="salesListData"/>-->
+                                <sales-list />
                             </div>
                             <div class="right-right2">
                                 <sales-rank :data="salesRankData" />
@@ -99,7 +100,8 @@
     import ImoocFlyBox from '/@/components/ImoocFlyBox/index.vue'
     import ScheduleView from '/@/components/ScheduleView/index.vue'
     import SalesRank from '/@/components/SalesRank/index.vue'
-    import SalesList from '/@/components/SalesList/index.vue'
+    // import SalesList from '/@/components/SalesList/index.vue'
+    import SalesList from '/@/components/SalesList/index1.vue'
 
     export default {
         name: "Home",

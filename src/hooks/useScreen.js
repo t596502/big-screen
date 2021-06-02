@@ -8,7 +8,6 @@ export function useScreen(id) {
         const dom = document.getElementById(id)
         width.value = dom.clientWidth
         height.value = dom.clientHeight
-        console.log(width.value,height.value);
     })
 
     return {

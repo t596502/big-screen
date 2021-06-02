@@ -43,7 +43,6 @@ export function useScreenData () {
 
     const fetchScreenData = async () => {
         const data = await screenDataRequest()
-        console.log(data)
         const {
             userToday, userGrowthLastDay, userGrowthLastMonth, age, devices, totalDevices, gender, rider, category,
             salesToday, orderToday, orderUser, covertRate, returnRate, realTimeOrder, areaSales, areaTop

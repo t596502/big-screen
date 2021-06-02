@@ -7,7 +7,7 @@ import scrollTest from '../view/scrollTest.vue'
 // 每个路由都需要映射到一个组件。
 // 我们后面再讨论嵌套路由。
 const routes = [
-    { path: '/', component: scrollTest },
+    { path: '/', component: Home },
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置

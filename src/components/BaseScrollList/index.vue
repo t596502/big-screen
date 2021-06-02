@@ -123,7 +123,7 @@
             const currentIndex = ref(0) // 动画指针
             const rowNum = ref(defaultConfig.rowNum)
             const align = ref([])
-
+            const isAnimationStart = ref(true)
             let avgHeight
 
             const handleHeader = (config) => {
@@ -184,7 +184,7 @@
                     rowIndex:index
                   }))
                 }
-                
+
             }
 
             const handleRows = (config) => {
@@ -197,7 +197,6 @@
                 if (rowsData.value.length < rowNum.value) {
                     rowNum.value = rowsData.value.length
                 }
-                console.log(rowNum.value)
                 avgHeight = unusedHeight / rowNum.value
                 rowHeights.value = new Array(rowNum.value).fill(avgHeight)
 
@@ -208,6 +207,8 @@
             }
 
             const startAnimation = async () => {
+                console.log(isAnimationStart.value);
+                if(!isAnimationStart.value) return
                 const config = actualConfig.value
                 const {data, rowNum, duration, moveNum} = config
                 const totalLength = rowsData.value.length
@@ -219,10 +220,9 @@
                 rows.push(..._rowsData.slice(0, index))
                 currentRowsData.value = rows
                 // 先将所有行的高度还原
-
                 rowHeights.value = new Array(totalLength).fill(avgHeight)
-                console.log('rowHeights.value',rowHeights.value)
                 const waitTime = 300
+                if(!isAnimationStart.value) return
                 await new Promise(resolve => setTimeout(resolve, waitTime))
                 // 将moveNum的行高度设置0
                 rowHeights.value.splice(0,moveNum,...new Array(moveNum).fill(0))
@@ -233,19 +233,30 @@
                 if(isLast >=0){
                     currentIndex.value = isLast
                 }
-
+                if(!isAnimationStart.value) return
                 await new Promise(resolve => setTimeout(resolve, duration - waitTime))
 
                 await startAnimation()
 
             }
-            onMounted(() => {
+            const stopAnimation = ()=>{
+                isAnimationStart.value = false
+            }
+            const update = ()=>{
+                stopAnimation()
                 const _actualConfig = assign(defaultConfig, props.config)
                 rowsData.value = _actualConfig.data || []
                 handleHeader(_actualConfig)
                 handleRows(_actualConfig)
                 actualConfig.value = _actualConfig
+                // 展示动画
+                isAnimationStart.value = true
                 startAnimation()
+            }
+
+            watch(()=>props.config,()=>{
+                console.log(999);
+                update()
             })
 
             return {
@@ -283,12 +294,11 @@
             display: flex;
             font-size: 15px;
             align-items: center;
-          
+
         }
 
         .base-scroll-list-rows-wrapper {
-            // overflow: hidden;
-
+            overflow: hidden;
             .base-scroll-list-rows {
                 display: flex;
                 align-items: center;
