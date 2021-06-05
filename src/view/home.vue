@@ -67,8 +67,8 @@
                         </div>
                         <div class="right-right">
                             <div class="right-right1">
-<!--                                <sales-list :data="salesListData"/>-->
-                                <sales-list />
+                                <sales-list :data="salesListData"/>
+<!--                                <sales-list />-->
                             </div>
                             <div class="right-right2">
                                 <sales-rank :data="salesRankData" />

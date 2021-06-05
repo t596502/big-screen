@@ -76,6 +76,8 @@
         headerIndexContent: '#',
         // 序号列标题的样式
         headerIndexStyle: {width: '50px'},
+        // 序号列的数据内容
+        headerIndexData:[],
         // 序号列内容的样式
         rowIndexStyle: {width: '50px'},
         // 数组项，二维数组
@@ -143,7 +145,11 @@
                     _rowStyle.unshift(config.rowIndexStyle)
                     _align.unshift('center')
                     _rowsData.forEach((row, index) => {
-                        row.unshift(index + 1)
+                        if(config.headerIndexData && config.headerIndexData.length > 0 && config.headerIndexData[index]){
+                            row.unshift(config.headerIndexData[index])
+                        }else{
+                            row.unshift(index + 1)
+                        }
                     })
                 }
                 // 动态计算header中每一列的宽度
@@ -236,7 +242,7 @@
                 if(!isAnimationStart.value) return
                 await new Promise(resolve => setTimeout(resolve, duration - waitTime))
 
-                await startAnimation()
+                // await startAnimation()
 
             }
             const stopAnimation = ()=>{
@@ -248,15 +254,17 @@
                 rowsData.value = _actualConfig.data || []
                 handleHeader(_actualConfig)
                 handleRows(_actualConfig)
+                console.log('_actualConfig:',_actualConfig);
                 actualConfig.value = _actualConfig
                 // 展示动画
                 isAnimationStart.value = true
                 startAnimation()
             }
 
-            watch(()=>props.config,()=>{
+            const stop = watch(()=>props.config,()=>{
                 console.log(999);
                 update()
+                stop()
             })
 
             return {
@@ -283,7 +291,7 @@
         height: 100%;
 
         .base-scroll-list-text {
-            padding: 0 10px;
+            /*padding: 0 10px;*/
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -304,7 +312,6 @@
                 align-items: center;
                 transition: all 0.3s linear;
                 .base-scroll-list-columns {
-                    font-size: 28px;
                 }
             }
         }
